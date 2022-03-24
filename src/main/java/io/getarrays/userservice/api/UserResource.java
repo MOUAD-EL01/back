@@ -41,7 +41,10 @@ public class UserResource {
     public ResponseEntity<List<User>>getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
-
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User>getUser(@PathVariable String username) {
+        return ResponseEntity.ok().body(userService.getUser(username));
+    }
     @PostMapping("/user/save")
     public ResponseEntity<User>saveUser(@RequestBody User user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
@@ -59,6 +62,8 @@ public class UserResource {
         userService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
+    
+    
 
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

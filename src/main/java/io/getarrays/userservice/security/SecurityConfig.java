@@ -3,6 +3,8 @@ package io.getarrays.userservice.security;
 import io.getarrays.userservice.filter.CustomAuthenticationFilter;
 import io.getarrays.userservice.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,7 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    @Value("${Angular.path}")
+    private String AngularPath;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -55,17 +58,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
 
-            config.setAllowedHeaders(Collections.singletonList("http://localhost:4200/**"));
+            config.setAllowedHeaders(Collections.singletonList("*"));
 
             config.setAllowedMethods(Collections.singletonList("*"));
-                config.addAllowedOrigin("*");
+                config.addAllowedOrigin(AngularPath);
 //               config.setAllowCredentials(true);
                 return config;
             }
         });
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll(); 
         http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);

@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,7 +25,16 @@ public class User {
     private Long id;
     private String name;
     private String username;
+    @JsonIgnore
     private String password;
+    private String image ;
+    private String lastname;
+    private String email;
+    private String adresse;
+    private String City;
+    private String country; 
     @ManyToMany(fetch = EAGER)
+    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
+    
 }
