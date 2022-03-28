@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**","/engine-rest/**").permitAll(); 
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**","/engine-rest/**","/camunda/**").permitAll(); 
         //http.antMatcher("app/**").authorizeRequests();
         
         http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
