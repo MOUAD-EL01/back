@@ -26,17 +26,12 @@ import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author Get Arrays (https://www.getarrays.io/)
- * @version 1.0
- * @since 7/10/2021
- */
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Value("${Angular.path}")
-    private String AngularPath;
+    /*@Value("${Angular.path}")
+    private String AngularPath;*/
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -47,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
-
+       
 
         http.cors()
 
@@ -61,14 +56,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             config.setAllowedHeaders(Collections.singletonList("*"));
 
             config.setAllowedMethods(Collections.singletonList("*"));
-                config.addAllowedOrigin(AngularPath);
+                config.addAllowedOrigin("*");
 //               config.setAllowCredentials(true);
                 return config;
             }
         });
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll(); 
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**","/engine-rest/**").permitAll(); 
+        //http.antMatcher("app/**").authorizeRequests();
+        
         http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+       
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
