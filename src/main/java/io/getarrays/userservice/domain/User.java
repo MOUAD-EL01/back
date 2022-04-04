@@ -24,8 +24,9 @@ public class User {
     @Id @GeneratedValue(strategy = AUTO)
     private Long id;
     private String name;
+    @Column(unique = true,nullable=false)
     private String username;
-    @JsonIgnore
+    @JsonIgnore 
     private String password;
     private String image ;
     private String lastname;
@@ -33,6 +34,8 @@ public class User {
     private String adresse;
     private String City;
     private String country; 
+    private String imagePath; 
+    
     @ManyToMany(fetch = EAGER)
     @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();

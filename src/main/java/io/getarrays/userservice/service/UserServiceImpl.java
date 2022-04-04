@@ -13,11 +13,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Get Arrays (https://www.getarrays.io/)
@@ -33,6 +36,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
+    
+        
         if(Objects.isNull(user)) {
             log.error("User not found in the database");
             throw new UsernameNotFoundException("User not found in the database");
@@ -56,6 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Role saveRole(Role role) {
         log.info("Saving new role {} to the database", role.getName());
+        
         return roleRepo.save(role);
     }
 
@@ -64,7 +70,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Adding role {} to user {}", roleName, username);
         User user = userRepo.findByUsername(username);
         Role role = roleRepo.findByName(roleName);
-        user.getRoles().add(role);
+        Collection<Role>roles=user.getRoles();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepo.save(user);
+        
     }
 
     @Override
@@ -79,4 +89,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Fetching all users");
         return userRepo.findAll();
     }
+
+	@Override
+	public void UpdateUser(Long id,User NewUserInfo) {
+		User us=userRepo.findById(id).orElseThrow();
+		us.setCountry(NewUserInfo.getCountry()	 );
+		us.setCity(NewUserInfo.getCity());
+		us.setAdresse(NewUserInfo.getAdresse());
+		us.setEmail(NewUserInfo.getEmail());
+		us.setLastname(NewUserInfo.getLastname());
+		us.setName(NewUserInfo.getName());
+		
+		
+	}
+
+	@Override
+	public User getUserById(Long id) {
+		// TODO Auto-generated method stub
+		return userRepo.findById(id).orElse(null);
+	}
+
+	
+	
+ 
+    
 }
