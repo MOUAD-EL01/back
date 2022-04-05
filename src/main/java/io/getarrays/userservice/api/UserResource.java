@@ -219,7 +219,6 @@ Session mailSession = Session.getInstance(mailProps, new Authenticator() {
 	//	File file=new File(us.getImagePath());
 		Path p=Paths.get(us.getImagePath());
 		return Files.readAllBytes(p) ;
-		
 	}
  
     
