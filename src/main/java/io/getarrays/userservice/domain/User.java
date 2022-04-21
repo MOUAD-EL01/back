@@ -36,7 +36,7 @@ public class User {
     private String country; 
     private String imagePath; 
     
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
     @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
     

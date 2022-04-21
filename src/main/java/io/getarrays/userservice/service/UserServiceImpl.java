@@ -109,6 +109,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return userRepo.findById(id).orElse(null);
 	}
 
+	@Override
+	public void RemoveUser(Long id) {
+		userRepo.deleteById(id);
+		
+	}
+	@Override
+	public void updateuserb(Long id,User NewUserInfo)
+	{
+		User us=userRepo.findById(id).orElseThrow();
+		us.setImage(NewUserInfo.getImage());
+		us.setImagePath(NewUserInfo.getImagePath());
+		
+	}
+
 	
 	
  

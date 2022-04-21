@@ -220,6 +220,13 @@ Session mailSession = Session.getInstance(mailProps, new Authenticator() {
 		Path p=Paths.get(us.getImagePath());
 		return Files.readAllBytes(p) ;
 	}
+    
+    
+    @DeleteMapping("/delete/{id}")
+    public void deleteUser(@PathVariable Long id) 
+    {
+    	userService.RemoveUser(id);
+    }
  
     
     
@@ -233,7 +240,7 @@ Session mailSession = Session.getInstance(mailProps, new Authenticator() {
         log.debug(multipartFile.getOriginalFilename()) ;
         String uploadDir = s_url +"/image";
         saveFile(uploadDir, fileName, multipartFile,user);
-        userService.saveUser(user);
+        userService.updateuserb(id, user);
         log.debug(fileName);
         System.out.println(uploadDir);
     }
