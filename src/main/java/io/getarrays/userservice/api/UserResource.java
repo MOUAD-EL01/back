@@ -118,7 +118,7 @@ Session mailSession = Session.getInstance(mailProps, new Authenticator() {
      message.setSubject("PasswordAndUsername", "UTF-8");
      Multipart mp = new MimeMultipart();
      MimeBodyPart mbp = new MimeBodyPart();
-     mbp.setContent("hi your username "+""+usname+"and password"+""+Pass+""+".", "text/html;charset=utf-8");
+     mbp.setContent("hi your username=>"+"  "+usname+"  "+"and password=>"+"  "+Pass+""+".", "text/html;charset=utf-8");
      mp.addBodyPart(mbp);
      message.setContent(mp);
      message.setSentDate(new java.util.Date());
@@ -226,6 +226,12 @@ Session mailSession = Session.getInstance(mailProps, new Authenticator() {
     public void deleteUser(@PathVariable Long id) 
     {
     	userService.RemoveUser(id);
+    }
+    @GetMapping("/users_roles/{id}")
+    public Collection<Role> getall(@PathVariable Long  id) 
+    {
+    	User us=userService.getUserById(id);
+    	return us.getRoles();
     }
  
     
